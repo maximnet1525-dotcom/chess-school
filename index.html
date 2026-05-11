@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шахматная школа — приватный сайт</title>
+    <!-- Шахматные библиотеки -->
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboard2@2.9.2/dist/chessboard2.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboard2@2.9.2/dist/chessboard2.min.js"></script>
+    <script src="https://unpkg.com/chess.js@0.10.3/chess.min.js"></script>
+    <!-- Шрифты и иконки -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            color: #1e2a3e;
+            padding: 24px 16px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        /* навигация */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 32px;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 60px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            justify-content: center;
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #4a5568;
+            font-family: inherit;
+        }
+        .nav-btn i { margin-right: 8px; }
+        .nav-btn.active {
+            background: #2c3e50;
+            color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .card h2 {
+            font-size: 1.7rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 5px solid #2c3e50;
+            padding-left: 18px;
+        }
+        .board-container { display: flex; justify-content: center; margin: 20px 0; }
+        #chessboard { width: 100%; max-width: 500px; }
+        .quiz-question {
+            background: #f8fafc;
+            padding: 16px 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        .quiz-question p { font-weight: 600; margin-bottom: 12px; }
+        .quiz-options { display: flex; flex-wrap: wrap; gap: 12px; }
+        .quiz-options label {
+            background: #eef2f6;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        button {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        button:hover { background: #1e2b38; }
+        .grade-table { width: 100%; border-collapse: collapse; overflow-x: auto; display: block; }
+        .grade-table th, .grade-table td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 8px;
+            text-align: left;
+        }
+        .teacher-mode {
+            background: #fef9e3;
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 20px;
+        }
+        .file-upload-area {
+            border: 2px dashed #cbd5e1;
+            padding: 24px;
+            text-align: center;
+            border-radius: 24px;
+            margin: 16px 0;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #6c757d;
+            font-size: 0.8rem;
+        }
+        .tab-content { display: none; }
+        .tab-content.active-tab { display: block; }
+        @media (max-width: 700px) {
+            .card { padding: 16px; }
+            .nav-btn { padding: 6px 12px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav-tabs" id="navTabs">
+        <button class="nav-btn" data-tab="home"><i class="fas fa-home"></i> Главная</button>
+        <button class="nav-btn" data-tab="board"><i class="fas fa-chess-board"></i> Доска</button>
+        <button class="nav-btn" data-tab="test"><i class="fas fa-tasks"></i> Тесты</button>
+        <button class="nav-btn" data-tab="homework"><i class="fas fa-upload"></i> ДЗ</button>
+        <button class="nav-btn" data-tab="grades"><i class="fas fa-chart-line"></i> Оценки</button>
+    </div>
+
+    <!-- Главная -->
+    <div id="tab-home" class="tab-content card">
+        <h2><i class="fas fa-crown"></i> Добро пожаловать в шахматную школу!</h2>
+        <p>Здесь вы найдёте интерактивную доску, тесты, домашние задания и свои оценки. Все материалы доступны только по этой ссылке.</p>
+        <p style="margin-top: 16px;"><strong>Инструкция:</strong> переключайте вкладки в меню выше. Доска полностью интерактивна – двигайте фигуры мышкой. Тесты проверяются автоматически. Домашнее задание можно загрузить файлом (учитель увидит его в режиме преподавателя).</p>
+    </div>
+
+    <!-- Доска -->
+    <div id="tab-board" class="tab-content card">
+        <h2><i class="fas fa-chess-queen"></i> Интерактивная доска</h2>
+        <div class="board-container"><div id="chessboard"></div></div>
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 12px;">
+            <button id="resetBoardBtn"><i class="fas fa-undo-alt"></i> Начать заново</button>
+            <button id="flipBoardBtn"><i class="fas fa-exchange-alt"></i> Повернуть доску</button>
+        </div>
+        <p style="margin-top: 16px; text-align: center;">Переставляйте фигуры — анализируйте любые позиции.</p>
+    </div>
+
+    <!-- Тесты -->
+    <div id="tab-test" class="tab-content card">
+        <h2><i class="fas fa-pen-alt"></i> Тест: мат в 1 ход</h2>
+        <div id="quizContainer"></div>
+        <button id="submitQuiz">Отправить тест и проверить</button>
+        <div id="quizResult" style="margin-top: 20px; font-weight: bold;"></div>
+    </div>
+
+    <!-- Домашнее задание -->
+    <div id="tab-homework" class="tab-content card">
+        <h2><i class="fas fa-cloud-upload-alt"></i> Домашнее задание</h2>
+        <p>Загрузите файл с решением (PGN, изображение, текст). Файл будет доступен преподавателю.</p>
+        <div class="file-upload-area" id="dropzone">
+            <i class="fas fa-file-upload fa-2x"></i>
+            <p>Перетащите файл сюда или нажмите, чтобы выбрать</p>
+            <input type="file" id="homeworkFileInput" style="display:none;">
+            <button id="selectFileBtn" style="background:#4b6e8a;">Выбрать файл</button>
+        </div>
+        <div id="uploadStatus"></div>
+        <div class="teacher-mode">
+            <i class="fas fa-chalkboard"></i> <strong>Для учителя:</strong> просмотр загруженных ДЗ — во вкладке «Оценки» (в режиме учителя).
+        </div>
+    </div>
+
+    <!-- Оценки -->
+    <div id="tab-grades" class="tab-content card">
+        <h2><i class="fas fa-star-of-life"></i> Журнал успеваемости</h2>
+        <div style="overflow-x: auto;">
+            <table class="grade-table" id="gradesTable">
+                <thead><tr><th>Ученик (ID)</th><th>Тест (мат в 1 ход)</th><th>ДЗ №1</th><th>Средний балл</th></tr></thead>
+                <tbody id="gradesBody"></tbody>
+            </table>
+        </div>
+        <div class="teacher-mode">
+            <i class="fas fa-lock"></i> <strong>Режим преподавателя</strong> 
+            <button id="enableTeacherBtn" style="background:#7f8c8d;">Войти</button>
+            <div id="teacherPanel" style="display:none; margin-top: 16px;">
+                <p>Вы можете выставить оценки:</p>
+                <label>ID ученика: <input type="text" id="studentIdInput" placeholder="например, Иванов"></label><br><br>
+                <label>Оценка за тест (0-10): <input type="number" id="testGradeInput" step="1"></label><br><br>
+                <label>Оценка за ДЗ (0-10): <input type="number" id="hwGradeInput" step="1"></label><br><br>
+                <button id="saveGradesBtn">Сохранить оценки</button>
+                <p id="teacherMsg" style="margin-top: 8px;"></p>
+                <hr>
+                <p><strong>Загруженные файлы ДЗ:</strong> <span id="uploadedFilesList">—</span></p>
+            </div>
+        </div>
+    </div>
+    <footer>© Шахматная школа — доступ только по вашей ссылке. Данные хранятся в вашем браузере.</footer>
+</div>
+
+<script>
+    // ----------------------------------- ШАХМАТНАЯ ДОСКА -----------------------------------
+    let board = null;
+    let game = new Chess();
+
+    function makeBoard() {
+        if (board) board.destroy(); // избегаем дублирования
+        const config = {
+            position: 'start',
+            draggable: true,
+            onDrop: function(source, target) {
+                const move = game.move({ from: source, to: target, promotion: 'q' });
+                if (move === null) return 'snapback';
+                board.position(game.fen());
+            }
+        };
+        board = Chessboard('chessboard', config);
+    }
+
+    // ----------------------------------- ТЕСТ -----------------------------------
+    const quizQuestions = [
+        { text: "Белые ставят мат в 1 ход. Какой ход правильный?", options: ["Ферзь d8", "Ладья h8#", "Слон g5", "Король f2"], correct: 1 },
+        { text: "Чёрные объявляют мат в 1 ход. Какой ход?", options: ["Фd1", "Лh1#", "Крg7", "Сb4"], correct: 1 }
+    ];
+
+    function renderQuiz() {
+        let html = '';
+        quizQuestions.forEach((q, idx) => {
+            html += `<div class="quiz-question">
+                        <p>${idx+1}. ${q.text}</p>
+                        <div class="quiz-options">`;
+            q.options.forEach((opt, optIdx) => {
+                html += `<label><input type="radio" name="q${idx}" value="${optIdx}"> ${opt}</label>`;
+            });
+            html += `</div></div>`;
+        });
+        document.getElementById('quizContainer').innerHTML = html;
+    }
+
+    function checkQuiz() {
+        let score = 0;
+        for(let i=0; i<quizQuestions.length; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            if(selected && parseInt(selected.value) === quizQuestions[i].correct) score++;
+        }
+        document.getElementById('quizResult').innerHTML = `Вы набрали ${score} из ${quizQuestions.length}. ${score===quizQuestions.length ? 'Отлично!' : 'Попробуйте ещё раз.'}`;
+    }
+
+    // ----------------------------------- ДАННЫЕ И ОЦЕНКИ -----------------------------------
+    let gradesData = JSON.parse(localStorage.getItem('chessGrades')) || {
+        students: [
+            { id: "Анна", testScore: null, homeworkScore: null },
+            { id: "Борис", testScore: null, homeworkScore: null },
+            { id: "Виктор", testScore: null, homeworkScore: null }
+        ],
+        uploadedHomework: []
+    };
+
+    function renderGrades() {
+        const tbody = document.getElementById('gradesBody');
+        tbody.innerHTML = '';
+        gradesData.students.forEach(s => {
+            const avg = ((s.testScore||0) + (s.homeworkScore||0)) / 2;
+            const avgDisplay = isNaN(avg) ? '-' : avg.toFixed(1);
+            tbody.innerHTML += `<tr>
+                <td>${escapeHtml(s.id)}</td>
+                <td>${s.testScore !== null ? s.testScore : '—'}</td>
+                <td>${s.homeworkScore !== null ? s.homeworkScore : '—'}</td>
+                <td>${avgDisplay}</td>
+            </tr>`;
+        });
+        // Список загруженных файлов ДЗ
+        const listSpan = document.getElementById('uploadedFilesList');
+        if(gradesData.uploadedHomework.length) {
+            let listHtml = '<ul style="margin-top:8px;">';
+            gradesData.uploadedHomework.forEach(f => {
+                listHtml += `<li><strong>${escapeHtml(f.studentId)}</strong>: ${escapeHtml(f.filename)} (${new Date(f.timestamp).toLocaleString()}) 
+                <a href="${f.dataURL}" download="${f.filename}">Скачать</a></li>`;
+            });
+            listHtml += '</ul>';
+            listSpan.innerHTML = listHtml;
+        } else {
+            listSpan.innerHTML = 'Нет загруженных ДЗ';
+        }
+    }
+
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;});}
+    function persistGrades() { localStorage.setItem('chessGrades', JSON.stringify(gradesData)); renderGrades(); }
+
+    // Загрузка файла ДЗ
+    function handleHomeworkFile(file) {
+        if(!file) return;
+        const studentId = prompt("Введите ваше имя (ID), чтобы привязать домашнее задание:", "Анна");
+        if(!studentId) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            gradesData.uploadedHomework.push({
+                studentId: studentId,
+                filename: file.name,
+                dataURL: e.target.result,
+                timestamp: Date.now()
+            });
+            persistGrades();
+            document.getElementById('uploadStatus').innerHTML = `<span style="color:green;">✅ Файл "${file.name}" загружен и сохранён!</span>`;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // ----------------------------------- ВКЛАДКИ (гарантированно работают) -----------------------------------
+    function switchTab(tabId) {
+        // Скрыть все вкладки
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active-tab');
+        });
+        // Показать выбранную
+        const activeTab = document.getElementById(`tab-${tabId}`);
+        if (activeTab) activeTab.classList.add('active-tab');
+        // Обновить активную кнопку
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            if (btn.dataset.tab === tabId) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        // Если открыли доску и она ещё не создана — создаём
+        if (tabId === 'board' && !board) makeBoard();
+        // Если доска уже была, но по какой-то причине не отображается — пересоздаём
+        if (tabId === 'board' && board) {
+            // просто обновляем позицию на всякий случай
+            board.position(game.fen());
+        }
+    }
+
+    // Навесить обработчики на все кнопки
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const tabId = btn.dataset.tab;
+            if (tabId) switchTab(tabId);
+        });
+    });
+
+    // ----------------------------------- РЕЖИМ УЧИТЕЛЯ -----------------------------------
+    let teacherModeActive = false;
+    document.getElementById('enableTeacherBtn').addEventListener('click', () => {
+        const pwd = prompt("Введите пароль преподавателя:");
+        if(pwd === 'chess123') {
+            teacherModeActive = true;
+            document.getElementById('teacherPanel').style.display = 'block';
+            document.getElementById('enableTeacherBtn').style.display = 'none';
+            document.getElementById('teacherMsg').innerHTML = '<span style="color:green;">Режим преподавателя активен</span>';
+            renderGrades();
+        } else alert('Неверный пароль');
+    });
+
+    document.getElementById('saveGradesBtn').addEventListener('click', () => {
+        if(!teacherModeActive) { alert("Только для учителя!"); return; }
+        const studentId = document.getElementById('studentIdInput').value.trim();
+        const testGrade = parseInt(document.getElementById('testGradeInput').value);
+        const hwGrade = parseInt(document.getElementById('hwGradeInput').value);
+        let found = false;
+        for(let s of gradesData.students) {
+            if(s.id === studentId) {
+                if(!isNaN(testGrade)) s.testScore = testGrade;
+                if(!isNaN(hwGrade)) s.homeworkScore = hwGrade;
+                found = true;
+                break;
+            }
+        }
+        if(!found && ( !isNaN(testGrade) || !isNaN(hwGrade) )) {
+            gradesData.students.push({ id: studentId, testScore: isNaN(testGrade)?null:testGrade, homeworkScore: isNaN(hwGrade)?null:hwGrade });
+        }
+        persistGrades();
+        document.getElementById('teacherMsg').innerHTML = 'Оценки сохранены!';
+        setTimeout(()=>{document.getElementById('teacherMsg').innerHTML='';}, 2000);
+    });
+
+    // ----------------------------------- СОБЫТИЯ ДЛЯ ДОСКИ И ТЕСТОВ -----------------------------------
+    document.getElementById('resetBoardBtn')?.addEventListener('click', () => {
+        if(board) { game.reset(); board.position('start'); }
+    });
+    document.getElementById('flipBoardBtn')?.addEventListener('click', () => {
+        if(board) board.flip();
+    });
+    document.getElementById('submitQuiz')?.addEventListener('click', checkQuiz);
+
+    // Загрузка файлов
+    document.getElementById('selectFileBtn').addEventListener('click', () => document.getElementById('homeworkFileInput').click());
+    document.getElementById('homeworkFileInput').addEventListener('change', (e) => { if(e.target.files.length) handleHomeworkFile(e.target.files[0]); });
+    const dropzone = document.getElementById('dropzone');
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.style.background='#eef2ff'; });
+    dropzone.addEventListener('dragleave', () => { dropzone.style.background=''; });
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.style.background='';
+        const file = e.dataTransfer.files[0];
+        if(file) handleHomeworkFile(file);
+    });
+
+    // ----------------------------------- СТАРТ -----------------------------------
+    renderQuiz();
+    renderGrades();
+    // По умолчанию показываем главную вкладку
+    switchTab('home');
+</script>
+</body>
+</html>
