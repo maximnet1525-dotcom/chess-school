@@ -3,135 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Шахматная школа | Преподаватель</title>
+    <title>Шахматная школа | Преподаватель и ученики</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: system-ui, 'Segoe UI', sans-serif;
-            background: #f0f4f8;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        /* Табы */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, 'Segoe UI', sans-serif; background: #f0f4f8; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; }
         .nav-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            background: white;
-            padding: 12px;
-            border-radius: 60px;
-            margin-bottom: 20px;
+            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+            background: white; padding: 12px; border-radius: 60px; margin-bottom: 20px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
         .nav-btn {
-            background: none;
-            border: none;
-            padding: 8px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #2c3e50;
+            background: none; border: none; padding: 8px 24px; border-radius: 40px;
+            font-weight: 600; font-size: 1rem; cursor: pointer; color: #2c3e50;
         }
-        .nav-btn.active {
-            background: #2c3e50;
-            color: white;
-        }
-        /* Карточки */
+        .nav-btn.active { background: #2c3e50; color: white; }
         .card {
-            background: white;
-            border-radius: 28px;
-            padding: 24px 28px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            background: white; border-radius: 28px; padding: 24px 28px;
+            margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
         }
         .card h2 {
-            font-size: 1.7rem;
-            margin-bottom: 20px;
-            border-left: 5px solid #2c3e50;
+            font-size: 1.7rem; margin-bottom: 20px; border-left: 5px solid #2c3e50;
             padding-left: 18px;
         }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        /* Доска */
-        canvas {
-            border: 2px solid #333;
-            border-radius: 8px;
-            cursor: pointer;
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        canvas { border: 2px solid #333; border-radius: 8px; cursor: pointer; max-width: 100%; height: auto; display: block; margin: 0 auto; }
         button {
-            background: #2c3e50;
-            color: white;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            margin-right: 8px;
+            background: #2c3e50; color: white; border: none; padding: 8px 18px;
+            border-radius: 30px; cursor: pointer; font-size: 0.9rem; margin-right: 8px;
         }
-        button:hover {
-            background: #1e2b38;
-        }
-        /* ДЗ */
+        button:hover { background: #1e2b38; }
         .file-upload-area {
-            border: 2px dashed #aaa;
-            padding: 24px;
-            text-align: center;
-            border-radius: 24px;
-            margin: 16px 0;
-            background: #fef9e3;
+            border: 2px dashed #aaa; padding: 24px; text-align: center; border-radius: 24px;
+            margin: 16px 0; background: #fef9e3;
         }
-        /* Таблица оценок */
-        .grade-table {
-            width: 100%;
-            border-collapse: collapse;
-            overflow-x: auto;
-            display: block;
-        }
-        .grade-table th, .grade-table td {
-            border-bottom: 1px solid #e2e8f0;
-            padding: 12px 8px;
-            text-align: left;
-        }
-        .grade-table th {
-            background-color: #f1f5f9;
-        }
+        .grade-table { width: 100%; border-collapse: collapse; overflow-x: auto; display: block; }
+        .grade-table th, .grade-table td { border-bottom: 1px solid #e2e8f0; padding: 12px 8px; text-align: left; }
+        .grade-table th { background-color: #f1f5f9; }
         .teacher-mode {
-            background: #fef9e3;
-            margin-top: 24px;
-            padding: 20px;
-            border-radius: 24px;
+            background: #fef9e3; margin-top: 24px; padding: 20px; border-radius: 24px;
         }
-        input {
-            padding: 6px 10px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            margin: 6px 0;
+        input, textarea {
+            padding: 6px 10px; border-radius: 20px; border: 1px solid #ccc;
+            margin: 6px 0; width: 100%; max-width: 400px;
         }
-        hr {
-            margin: 16px 0;
+        textarea { font-family: inherit; }
+        hr { margin: 16px 0; }
+        .homework-assignment {
+            background: #e9f0f9; padding: 16px; border-radius: 20px; margin-bottom: 20px;
         }
-        @media (max-width: 700px) {
-            .card { padding: 16px; }
-            .nav-btn { padding: 6px 14px; }
-        }
+        .homework-assignment h3 { margin-bottom: 8px; }
+        @media (max-width: 700px) { .card { padding: 16px; } .nav-btn { padding: 6px 14px; } }
     </style>
 </head>
 <body>
@@ -140,16 +63,14 @@
         <button class="nav-btn active" data-tab="home">🏠 Главная</button>
         <button class="nav-btn" data-tab="board">♟️ Доска</button>
         <button class="nav-btn" data-tab="homework">📤 Домашнее задание</button>
-        <button class="nav-btn" data-tab="grades">⭐ Журнал оценок</button>
+        <button class="nav-btn" data-tab="grades">⭐ Оценки</button>
     </div>
 
     <!-- Главная -->
     <div id="home" class="tab-content active card">
         <h2>Шахматная онлайн-школа</h2>
-        <p>Добро пожаловать! Здесь вы найдёте интерактивную доску, сможете загрузить домашнее задание и посмотреть свои оценки.</p>
-        <p>📌 Преподаватель выставляет оценки вручную после проверки заданий.</p>
-        <p>📌 Вкладка <strong>«Домашнее задание»</strong> — загружайте файлы (PGN, фото, текст).</p>
-        <p>📌 Вкладка <strong>«Журнал оценок»</strong> — текущие результаты по категориям.</p>
+        <p>Добро пожаловать! Здесь вы найдёте интерактивную доску, текущее домашнее задание (выдаёт преподаватель), сможете загрузить своё решение и посмотреть оценки.</p>
+        <p>📌 Преподаватель входит в режим учителя (пароль <strong>chess123</strong>) и может выдать задание, а также выставлять оценки.</p>
     </div>
 
     <!-- Доска -->
@@ -163,16 +84,38 @@
         <p style="margin-top: 16px; text-align: center;">Нажмите на фигуру, затем на клетку — ход выполнится.</p>
     </div>
 
-    <!-- Домашнее задание (загрузка файлов) -->
+    <!-- Домашнее задание (для всех) -->
     <div id="homework" class="tab-content card">
-        <h2>📤 Загрузить домашнее задание</h2>
+        <h2>📚 Текущее домашнее задание</h2>
+        <div id="homeworkAssignmentDisplay" class="homework-assignment">
+            <p><em>Загрузка...</em></p>
+        </div>
+        <hr>
+        <h3>📥 Загрузить своё решение</h3>
         <div class="file-upload-area" id="dropzone">
-            <p>📂 Перетащите файл сюда или нажмите кнопку ниже</p>
-            <input type="file" id="homeworkFileInput" style="display:none;">
-            <button id="selectFileBtn">Выбрать файл</button>
+            <p>📂 Перетащите файл сюда или нажмите кнопку</p>
+            <input type="file" id="studentHomeworkFile" style="display:none;">
+            <button id="selectStudentFileBtn">Выбрать файл</button>
         </div>
         <div id="uploadStatus"></div>
-        <p style="margin-top: 12px; font-size: 0.9rem;">Принимаются файлы PGN, изображения, PDF, текстовые документы. Преподаватель увидит их в режиме учителя.</p>
+        <p style="margin-top: 12px; font-size: 0.9rem;">Принимаются PGN, изображения, PDF, текст. Преподаватель увидит ваше решение.</p>
+        
+        <!-- Панель преподавателя для выдачи ДЗ -->
+        <div class="teacher-mode" style="margin-top: 32px;">
+            <button id="enableTeacherHomeworkBtn">🔐 Режим преподавателя (выдать задание)</button>
+            <div id="teacherHomeworkPanel" style="display:none; margin-top: 16px;">
+                <h4>✏️ Выдать новое домашнее задание</h4>
+                <label>Текст задания:</label><br>
+                <textarea id="assignmentText" rows="4" cols="50" placeholder="Например: решите задачу на мат в 2 хода, приложите PGN..."></textarea><br>
+                <label>Прикрепить файл (необязательно):</label>
+                <input type="file" id="assignmentFileInput" accept=".pgn,.txt,.pdf,.jpg,.png"><br>
+                <button id="publishAssignmentBtn">📢 Опубликовать задание</button>
+                <p id="teacherAssignmentMsg" style="margin-top: 8px;"></p>
+                <hr>
+                <h4>📁 Решения учеников</h4>
+                <div id="studentSolutionsList">—</div>
+            </div>
+        </div>
     </div>
 
     <!-- Оценки -->
@@ -181,24 +124,14 @@
         <div style="overflow-x: auto;">
             <table class="grade-table">
                 <thead>
-                    <tr>
-                        <th>Ученик</th>
-                        <th>Поведение</th>
-                        <th>Задачи</th>
-                        <th>Партии</th>
-                        <th>Знание материала</th>
-                        <th>Средний балл</th>
-                    </tr>
+                    <tr><th>Ученик</th><th>Поведение</th><th>Задачи</th><th>Партии</th><th>Знание материала</th><th>Средний балл</th></tr>
                 </thead>
-                <tbody id="gradesBody">
-                    <tr><td colspan="6" style="text-align:center;">Загрузка...</td></tr>
-                </tbody>
+                <tbody id="gradesBody"><tr><td colspan="6">Загрузка...</td></tr></tbody>
             </table>
         </div>
-
         <div class="teacher-mode">
-            <button id="enableTeacherBtn">🔐 Режим преподавателя</button>
-            <div id="teacherPanel" style="display:none; margin-top: 16px;">
+            <button id="enableTeacherGradesBtn">🔐 Режим преподавателя (оценки)</button>
+            <div id="teacherGradesPanel" style="display:none; margin-top: 16px;">
                 <h4>Выставление оценок</h4>
                 <label>ФИО ученика: <input type="text" id="studentName" placeholder="Иванов Иван"></label><br>
                 <label>Поведение (0–10): <input type="number" id="gradeBehavior" min="0" max="10" step="1"></label><br>
@@ -207,17 +140,14 @@
                 <label>Знание материала (0–10): <input type="number" id="gradeTheory" min="0" max="10" step="1"></label><br>
                 <button id="saveGradesBtn">💾 Сохранить оценки ученику</button>
                 <button id="deleteStudentBtn" style="background:#c2410c;">🗑 Удалить ученика</button>
-                <p id="teacherMsg" style="margin-top: 8px;"></p>
-                <hr>
-                <h4>📁 Загруженные домашние задания</h4>
-                <div id="filesListContainer">—</div>
+                <p id="teacherMsg"></p>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // ----------------------------------- ШАХМАТЫ (canvas) -----------------------------------
+    // ----------------------- ШАХМАТЫ (canvas) -----------------------
     const canvas = document.getElementById('chessCanvas');
     const ctx = canvas.getContext('2d');
     let board = [
@@ -248,24 +178,22 @@
                 }
                 const piece = board[row][col];
                 if (piece) {
-                    let symbol = '';
+                    let sym = '';
                     switch (piece) {
-                        case 'k': symbol = '♔'; break; case 'K': symbol = '♚'; break;
-                        case 'q': symbol = '♕'; break; case 'Q': symbol = '♛'; break;
-                        case 'r': symbol = '♖'; break; case 'R': symbol = '♜'; break;
-                        case 'b': symbol = '♗'; break; case 'B': symbol = '♝'; break;
-                        case 'n': symbol = '♘'; break; case 'N': symbol = '♞'; break;
-                        case 'p': symbol = '♙'; break; case 'P': symbol = '♟'; break;
-                        default: symbol = '';
+                        case 'k': sym = '♔'; break; case 'K': sym = '♚'; break;
+                        case 'q': sym = '♕'; break; case 'Q': sym = '♛'; break;
+                        case 'r': sym = '♖'; break; case 'R': sym = '♜'; break;
+                        case 'b': sym = '♗'; break; case 'B': sym = '♝'; break;
+                        case 'n': sym = '♘'; break; case 'N': sym = '♞'; break;
+                        case 'p': sym = '♙'; break; case 'P': sym = '♟'; break;
                     }
                     ctx.font = `bold ${cell * 0.7}px 'Segoe UI'`;
                     ctx.fillStyle = piece === piece.toUpperCase() ? '#ffffff' : '#222222';
-                    ctx.fillText(symbol, x + cell * 0.28, y + cell * 0.78);
+                    ctx.fillText(sym, x + cell * 0.28, y + cell * 0.78);
                 }
             }
         }
     }
-
     function movePiece(fromRow, fromCol, toRow, toCol) {
         const piece = board[fromRow][fromCol];
         const target = board[toRow][toCol];
@@ -275,7 +203,6 @@
         board[fromRow][fromCol] = '';
         return true;
     }
-
     canvas.addEventListener('click', (e) => {
         const rect = canvas.getBoundingClientRect();
         const scale = canvas.width / rect.width;
@@ -287,23 +214,12 @@
         let r = flipped ? 7 - row : row;
         let c = flipped ? 7 - col : col;
         if (selectedRow === null) {
-            if (board[r] && board[r][c]) {
-                selectedRow = r;
-                selectedCol = c;
-                drawBoard();
-            }
+            if (board[r] && board[r][c]) { selectedRow = r; selectedCol = c; drawBoard(); }
         } else {
-            if (selectedRow === r && selectedCol === c) {
-                selectedRow = null;
-                drawBoard();
-            } else {
-                movePiece(selectedRow, selectedCol, r, c);
-                selectedRow = null;
-                drawBoard();
-            }
+            if (selectedRow === r && selectedCol === c) { selectedRow = null; drawBoard(); }
+            else { movePiece(selectedRow, selectedCol, r, c); selectedRow = null; drawBoard(); }
         }
     });
-
     document.getElementById('resetBoardBtn').addEventListener('click', () => {
         board = [
             ['r','n','b','q','k','b','n','r'],
@@ -315,29 +231,49 @@
             ['P','P','P','P','P','P','P','P'],
             ['R','N','B','Q','K','B','N','R']
         ];
-        selectedRow = null;
-        drawBoard();
+        selectedRow = null; drawBoard();
     });
-    document.getElementById('flipBoardBtn').addEventListener('click', () => {
-        flipped = !flipped;
-        drawBoard();
-    });
+    document.getElementById('flipBoardBtn').addEventListener('click', () => { flipped = !flipped; drawBoard(); });
     drawBoard();
 
-    // ----------------------------------- РАБОТА С ДАННЫМИ (localStorage) -----------------------------------
-    let schoolData = JSON.parse(localStorage.getItem('chessSchool')) || {
-        students: [],   // { id, behavior, tasks, games, theory }
-        homeworkFiles: [] // { student, name, dataURL, timestamp }
+    // ----------------------- ХРАНИЛИЩЕ ДАННЫХ -----------------------
+    let schoolData = JSON.parse(localStorage.getItem('chessSchoolV2')) || {
+        students: [],               // { id, behavior, tasks, games, theory }
+        homeworkSolutions: [],      // { student, name, dataURL, timestamp }
+        currentAssignment: { text: "", fileData: null, fileName: "" }  // задание от учителя
     };
 
+    // Функции для работы с данными
+    function saveAll() {
+        localStorage.setItem('chessSchoolV2', JSON.stringify(schoolData));
+        renderGrades();
+        renderCurrentAssignment();
+    }
+
+    // Отображение текущего задания для всех
+    function renderCurrentAssignment() {
+        const container = document.getElementById('homeworkAssignmentDisplay');
+        if (!container) return;
+        const assign = schoolData.currentAssignment;
+        if (!assign.text && !assign.fileData) {
+            container.innerHTML = '<p><em>Нет активного домашнего задания. Преподаватель опубликует его позже.</em></p>';
+            return;
+        }
+        let html = '<h3>📌 Задание:</h3><p style="white-space: pre-wrap;">' + escapeHtml(assign.text) + '</p>';
+        if (assign.fileData && assign.fileName) {
+            html += `<p><strong>Вложенный файл:</strong> <a href="${assign.fileData}" download="${assign.fileName}">📎 ${escapeHtml(assign.fileName)}</a></p>`;
+        }
+        container.innerHTML = html;
+    }
+
+    // Таблица оценок
     function calculateAvg(student) {
         const scores = [student.behavior, student.tasks, student.games, student.theory];
         const valid = scores.filter(v => v !== null && !isNaN(v));
         if (valid.length === 0) return null;
-        const sum = valid.reduce((a, b) => a + b, 0);
+        const sum = valid.reduce((a,b) => a+b, 0);
         return (sum / valid.length).toFixed(1);
     }
-
     function escapeHtml(str) {
         if (!str) return '';
         return String(str).replace(/[&<>]/g, function(m) {
@@ -347,8 +283,7 @@
             return m;
         });
     }
-
-    function renderGradesTable() {
+    function renderGrades() {
         const tbody = document.getElementById('gradesBody');
         if (!schoolData.students.length) {
             tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Нет учеников. Добавьте через режим преподавателя.</td></tr>';
@@ -368,25 +303,22 @@
                 `;
             });
         }
-        // Обновляем список файлов в панели учителя
-        const filesContainer = document.getElementById('filesListContainer');
-        if (schoolData.homeworkFiles.length) {
-            let html = '<ul style="margin: 8px 0 0 20px;">';
-            schoolData.homeworkFiles.forEach(f => {
-                html += `<li><strong>${escapeHtml(f.student)}</strong>: ${escapeHtml(f.name)} 
-                         <a href="${f.dataURL}" download="${f.name}">⬇️ скачать</a> 
-                         (${new Date(f.timestamp).toLocaleString()})</li>`;
-            });
-            html += '</ul>';
-            filesContainer.innerHTML = html;
-        } else {
-            filesContainer.innerHTML = 'Нет загруженных файлов';
+        // Обновляем список решений учеников в панели преподавателя (на вкладке ДЗ)
+        const solutionsContainer = document.getElementById('studentSolutionsList');
+        if (solutionsContainer) {
+            if (schoolData.homeworkSolutions.length) {
+                let list = '<ul>';
+                schoolData.homeworkSolutions.forEach(sol => {
+                    list += `<li><strong>${escapeHtml(sol.student)}</strong>: ${escapeHtml(sol.name)} 
+                             <a href="${sol.dataURL}" download="${sol.name}">⬇️ скачать</a> 
+                             (${new Date(sol.timestamp).toLocaleString()})</li>`;
+                });
+                list += '</ul>';
+                solutionsContainer.innerHTML = list;
+            } else {
+                solutionsContainer.innerHTML = 'Нет загруженных решений';
+            }
         }
-    }
-
-    function saveAllData() {
-        localStorage.setItem('chessSchool', JSON.stringify(schoolData));
-        renderGradesTable();
     }
 
     // Добавить/обновить ученика
@@ -406,64 +338,106 @@
                 theory: (theory !== null && !isNaN(theory)) ? theory : null
             });
         }
-        saveAllData();
+        saveAll();
     }
-
     function deleteStudent(name) {
         schoolData.students = schoolData.students.filter(s => s.id !== name);
-        saveAllData();
+        saveAll();
     }
 
-    // ----------------------------------- ЗАГРУЗКА ФАЙЛОВ (ДЗ) -----------------------------------
-    function uploadHomeworkFile(file) {
+    // ----------------------- ЗАГРУЗКА РЕШЕНИЙ УЧЕНИКАМИ -----------------------
+    function uploadSolution(file) {
         if (!file) return;
         const studentName = prompt("Введите ваше имя (ФИО):", "Иванов Иван");
         if (!studentName) return;
         const reader = new FileReader();
         reader.onload = (e) => {
-            schoolData.homeworkFiles.push({
+            schoolData.homeworkSolutions.push({
                 student: studentName,
                 name: file.name,
                 dataURL: e.target.result,
                 timestamp: Date.now()
             });
-            saveAllData();
+            saveAll();
             const statusDiv = document.getElementById('uploadStatus');
-            statusDiv.innerHTML = `<span style="color:green;">✅ Файл "${file.name}" успешно загружен!</span>`;
-            setTimeout(() => statusDiv.innerHTML = '', 3000);
+            statusDiv.innerHTML = `<span style="color:green;">✅ Решение "${file.name}" загружено. Преподаватель увидит его.</span>`;
+            setTimeout(() => statusDiv.innerHTML = '', 4000);
         };
         reader.readAsDataURL(file);
     }
-
-    document.getElementById('selectFileBtn').addEventListener('click', () => {
-        document.getElementById('homeworkFileInput').click();
+    document.getElementById('selectStudentFileBtn').addEventListener('click', () => {
+        document.getElementById('studentHomeworkFile').click();
     });
-    document.getElementById('homeworkFileInput').addEventListener('change', (e) => {
-        if (e.target.files.length) uploadHomeworkFile(e.target.files[0]);
+    document.getElementById('studentHomeworkFile').addEventListener('change', (e) => {
+        if (e.target.files.length) uploadSolution(e.target.files[0]);
     });
     const dropzone = document.getElementById('dropzone');
     dropzone.addEventListener('dragover', (e) => e.preventDefault());
     dropzone.addEventListener('drop', (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
-        if (file) uploadHomeworkFile(file);
+        if (file) uploadSolution(file);
     });
 
-    // ----------------------------------- РЕЖИМ ПРЕПОДАВАТЕЛЯ -----------------------------------
-    let teacherActive = false;
-    document.getElementById('enableTeacherBtn').addEventListener('click', () => {
+    // ----------------------- РЕЖИМ ПРЕПОДАВАТЕЛЯ: выдача ДЗ -----------------------
+    let teacherHomeworkActive = false;
+    document.getElementById('enableTeacherHomeworkBtn').addEventListener('click', () => {
         const pwd = prompt("Введите пароль преподавателя:");
         if (pwd === 'chess123') {
-            teacherActive = true;
-            document.getElementById('teacherPanel').style.display = 'block';
-            document.getElementById('enableTeacherBtn').style.display = 'none';
+            teacherHomeworkActive = true;
+            document.getElementById('teacherHomeworkPanel').style.display = 'block';
+            document.getElementById('enableTeacherHomeworkBtn').style.display = 'none';
+        } else alert('Неверный пароль');
+    });
+    // Публикация задания
+    document.getElementById('publishAssignmentBtn').addEventListener('click', () => {
+        if (!teacherHomeworkActive) { alert("Только для преподавателя"); return; }
+        const text = document.getElementById('assignmentText').value;
+        const fileInput = document.getElementById('assignmentFileInput');
+        if (!text && (!fileInput.files || !fileInput.files[0])) {
+            alert("Введите текст задания или прикрепите файл");
+            return;
+        }
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                schoolData.currentAssignment = {
+                    text: text,
+                    fileData: e.target.result,
+                    fileName: fileInput.files[0].name
+                };
+                saveAll();
+                document.getElementById('teacherAssignmentMsg').innerHTML = '✅ Задание опубликовано!';
+                setTimeout(() => document.getElementById('teacherAssignmentMsg').innerHTML = '', 3000);
+                document.getElementById('assignmentText').value = '';
+                fileInput.value = '';
+            };
+            reader.readAsDataURL(fileInput.files[0]);
         } else {
-            alert('Неверный пароль');
+            schoolData.currentAssignment = {
+                text: text,
+                fileData: null,
+                fileName: ""
+            };
+            saveAll();
+            document.getElementById('teacherAssignmentMsg').innerHTML = '✅ Задание опубликовано!';
+            setTimeout(() => document.getElementById('teacherAssignmentMsg').innerHTML = '', 3000);
+            document.getElementById('assignmentText').value = '';
         }
     });
 
+    // ----------------------- РЕЖИМ ПРЕПОДАВАТЕЛЯ: оценки -----------------------
+    let teacherGradesActive = false;
+    document.getElementById('enableTeacherGradesBtn').addEventListener('click', () => {
+        const pwd = prompt("Введите пароль преподавателя:");
+        if (pwd === 'chess123') {
+            teacherGradesActive = true;
+            document.getElementById('teacherGradesPanel').style.display = 'block';
+            document.getElementById('enableTeacherGradesBtn').style.display = 'none';
+        } else alert('Неверный пароль');
+    });
     document.getElementById('saveGradesBtn').addEventListener('click', () => {
-        if (!teacherActive) { alert("Доступ только для преподавателя!"); return; }
+        if (!teacherGradesActive) { alert("Доступ только для преподавателя"); return; }
         const name = document.getElementById('studentName').value.trim();
         if (!name) { alert("Введите ФИО ученика"); return; }
         const behavior = parseInt(document.getElementById('gradeBehavior').value);
@@ -479,11 +453,9 @@
         );
         document.getElementById('teacherMsg').innerHTML = 'Оценки сохранены';
         setTimeout(() => document.getElementById('teacherMsg').innerHTML = '', 2000);
-        // Не очищаем поля, чтобы быстро выставить другому ученику
     });
-
     document.getElementById('deleteStudentBtn').addEventListener('click', () => {
-        if (!teacherActive) { alert("Доступ только для преподавателя!"); return; }
+        if (!teacherGradesActive) { alert("Доступ только для преподавателя"); return; }
         const name = document.getElementById('studentName').value.trim();
         if (!name) { alert("Введите ФИО ученика для удаления"); return; }
         if (confirm(`Удалить ученика "${name}" и все его оценки?`)) {
@@ -494,7 +466,7 @@
         }
     });
 
-    // ----------------------------------- НАВИГАЦИЯ (ВКЛАДКИ) -----------------------------------
+    // ----------------------- НАВИГАЦИЯ (вкладки) -----------------------
     const navBtns = document.querySelectorAll('.nav-btn');
     const contentDivs = {
         home: document.getElementById('home'),
@@ -510,14 +482,16 @@
             else btn.classList.remove('active');
         });
         if (tabId === 'board') drawBoard();
-        if (tabId === 'grades') renderGradesTable();
+        if (tabId === 'grades') renderGrades();
+        if (tabId === 'homework') renderCurrentAssignment();
     }
     navBtns.forEach(btn => {
         btn.addEventListener('click', () => showTab(btn.dataset.tab));
     });
 
     // Инициализация
-    renderGradesTable();
+    renderGrades();
+    renderCurrentAssignment();
     showTab('home');
 </script>
 </body>
