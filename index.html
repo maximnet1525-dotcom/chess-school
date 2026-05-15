@@ -43,7 +43,8 @@
         <button class="nav-btn" data-tab="tournament">🏆 Турниры</button>
         <button class="nav-btn" data-tab="computer">🤖 Компьютер</button>
     </div>
-        <!-- Главная -->
+
+    <!-- Главная -->
     <div id="home" class="tab-content active card">
         <h2>Шахматная школа</h2>
         <div class="sync-panel">
@@ -68,11 +69,11 @@
         </div>
         <div id="studentPanel" style="display:none;">
             <h3>Мои оценки</h3>
-            <table class="grade-table"><thead><th>Поведение</th><th>Задачи</th><th>Партии</th><th>Знание</th><th>Средний</th></thead><tbody id="myGradesBody"></tbody></table>
+            <table class="grade-table"><thead><tr><th>Поведение</th><th>Задачи</th><th>Партии</th><th>Знание</th><th>Средний</th></tr></thead><tbody id="myGradesBody"></tbody></table>
         </div>
         <div id="teacherPanelFull" style="display:none;">
             <h3>Все ученики (редактирование)</h3>
-            <table class="grade-table"><thead><th>Ученик</th><th>Поведение</th><th>Задачи</th><th>Партии</th><th>Знание</th><th>Действия</th></thead><tbody id="allGradesBody"></tbody></table>
+            <table class="grade-table"><thead><tr><th>Ученик</th><th>Поведение</th><th>Задачи</th><th>Партии</th><th>Знание</th><th>Действия</th></tr></thead><tbody id="allGradesBody"></tbody></table>
             <button id="addStudentBtn">➕ Добавить ученика</button>
             <div id="teacherMsg"></div>
         </div>
@@ -131,6 +132,7 @@
         <div id="gameStatus"></div>
     </div>
 </div>
+
 <script>
     // ========== 1. WebRTC и синхронизируемые данные ==========
     let peer = null, isHost = false, connections = [], currentConn = null;
@@ -142,7 +144,6 @@
     };
     let currentUser = null;  // { name, role }
 
-    // Функции синхронизации
     function sendToAll(type, data) { connections.forEach(c => { if(c.open) c.send({type, data}); }); }
     function broadcastUpdate(module, payload) { sendToAll('sync', {module, payload}); }
     function loadSyncData() {
@@ -151,13 +152,12 @@
             const parsed = JSON.parse(saved);
             syncData = { ...syncData, ...parsed };
         } else if(isHost && (!syncData.grades.length || !syncData.library.materials.length)) {
-            // начальные данные
             syncData.grades = [
                 { studentName: "Анна", behavior: 8, tasks: 7, games: 9, theory: 8 },
                 { studentName: "Борис", behavior: 6, tasks: 8, games: 7, theory: 7 }
             ];
             syncData.library.materials = [
-                { id: "1", category: "lessons", title: "Основы", content: "Шахматы – игра...", tags: ["правила"] },
+                { id: "1", category: "lessons", title: "Основы", content: "Шахматы – игра для двух игроков...", tags: ["правила"] },
                 { id: "2", category: "tasks", title: "Мат в 1 ход", content: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", tags: ["мат"] }
             ];
             syncData.tournaments = [];
@@ -186,6 +186,7 @@
             peer.on('connection', conn => {
                 connections.push(conn);
                 conn.on('open', () => { conn.send({ type: 'full', data: syncData }); });
+                conn.on('close', () => { connections = connections.filter(c => c !== conn); });
             });
         });
         document.getElementById('becomeHostBtn').disabled = true;
@@ -218,7 +219,8 @@
             });
         });
     };
-        // ========== 2. Личный кабинет и оценки ==========
+
+    // ========== 2. Личный кабинет и оценки ==========
     function renderAllGrades() {
         const tbody = document.getElementById('allGradesBody');
         if(!syncData.grades.length) { tbody.innerHTML = '<tr><td colspan="6">Нет учеников</td></tr>'; return; }
@@ -280,7 +282,6 @@
         document.getElementById('loginPanel').style.display = 'none';
         document.getElementById('studentPanel').style.display = 'block';
         renderStudentGrades();
-        // скрыть учительские режимы в других вкладках
         document.getElementById('teacherHwMode').style.display = 'none';
         document.getElementById('teacherLibMode').style.display = 'none';
         document.getElementById('teacherTournamentMode').style.display = 'none';
@@ -292,7 +293,6 @@
             document.getElementById('loginPanel').style.display = 'none';
             document.getElementById('teacherPanelFull').style.display = 'block';
             renderAllGrades();
-            // показать учительские панели
             document.getElementById('teacherHwMode').style.display = 'block';
             document.getElementById('teacherLibMode').style.display = 'block';
             document.getElementById('teacherTournamentMode').style.display = 'block';
@@ -340,7 +340,8 @@
         if(!solutions.length) { list.innerHTML = ''; return; }
         list.innerHTML = '<h4>Решения:</h4><ul>'+solutions.map(s => `<li>${escapeHtml(s.name)}: ${escapeHtml(s.filename)} <a href="${s.data}" download="${s.filename}">Скачать</a></li>`).join('')+'</ul>';
     }
-        // ========== 4. Библиотека ==========
+
+    // ========== 4. Библиотека ==========
     function renderLibrary() {
         const cat = document.querySelector('.libCat.active').dataset.cat;
         const materials = syncData.library.materials.filter(m => m.category === cat);
@@ -533,9 +534,17 @@
     redrawCompBoard();
 
     // ========== 8. Навигация и вспомогательные функции ==========
-    function escapeHtml(str) { return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
+    function escapeHtml(str) { if(!str) return ''; return String(str).replace(/[&<>]/g, m => m==='&'?'&amp;': m==='<'?'&lt;':'&gt;'); }
     const tabs = document.querySelectorAll('.nav-btn');
-    const contents = { home:document.getElementById('home'), profile:document.getElementById('profile'), board:document.getElementById('board'), homework:document.getElementById('homework'), library:document.getElementById('library'), tournament:document.getElementById('tournament'), computer:document.getElementById('computer') };
+    const contents = {
+        home: document.getElementById('home'),
+        profile: document.getElementById('profile'),
+        board: document.getElementById('board'),
+        homework: document.getElementById('homework'),
+        library: document.getElementById('library'),
+        tournament: document.getElementById('tournament'),
+        computer: document.getElementById('computer')
+    };
     function showTab(id) {
         Object.values(contents).forEach(t => t.classList.remove('active'));
         contents[id].classList.add('active');
